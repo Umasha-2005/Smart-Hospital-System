@@ -130,7 +130,8 @@ float calculateWaitingTime (int specialtyIdx, int currentQueuePosition)
     return (float)(currentQueuePosition * avgTime);
 }
 
-void registerPatient() {
+void registerPatient()
+ {
     if (patientCount >= maxPatients) {
         printf("\nError: Maximum patient limit (%d) reached.\n", maxPatients);
         return;
@@ -233,6 +234,45 @@ void registerPatient() {
 
     patientCount++;
     printf("\nPatient registered successfully! Assigned Patient ID: %d\n", patientId[idx]);
+}
+
+void calculateBilling(int idx)
+{
+    int specIdx = getSpecialtyIndex(patientSpecialty[idx]);
+
+    baseFee[idx] = consultationFee[specIdx];
+
+    if (patientUrgency[idx] == 1)
+    {
+        emergencySurcharge[idx] = baseFee[idx] * 0.20f;
+    }
+    else
+    {
+        emergencySurcharge[idx] = 0.0f;
+    }
+
+    if (patientAdmitted[idx] == 1)
+    {
+        int wIdx = getWardIndex(patientWard[idx]);
+        wardCost[idx] = wardDailyRate[wIdx] * patientDays[idx];
+    }
+    else
+    {
+        wardCost[idx] = 0.0f;
+    }
+
+    grossTotal[idx] = baseFee[idx] + emergencySurcharge[idx] + wardCost[idx];
+
+    if (patientAge[idx]>=60)
+    {
+        discount[idx] = grossTotal[idx] * 0.10f;
+    }
+    else
+    {
+        discount[idx] = 0.0f;
+    }
+
+    finalPayable[idx] = grossTotal[idx] - discount[idx];
 }
 
 int main()
