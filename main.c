@@ -111,6 +111,25 @@ int getWardIndex (int id)
     return -1;
 }
 
+int findAvailableBed(int wardIdx)
+{
+    int capacity = wardCapacity[wardIdx];
+    for (int b=0; b<capacity; b++)
+    {
+        if (bedOccupancy[wardIdx] == 0)
+        {
+            return b;
+        }
+    }
+    return -1;
+}
+
+float calculateWaitingTime (int specialtyIdx, int currentQueuePosition)
+{
+    int avgTime = consultationTime[specialtyIdx];
+    return (float)(currentQueuePosition * avgTime);
+}
+
 
 int main()
 {
