@@ -61,6 +61,22 @@ void initializeBeds()
     }
 }
 
+void displaySpecialties() {
+    int i;
+    printf("\n=================================================================================\n");
+    printf("                                DOCTOR SPECIALTIES\n");
+    printf("=================================================================================\n");
+    printf("%-5s | %-20s | %-15s | %-12s | %-10s\n", "ID", "Specialty", "Fee (LKR)",
+           "Time (mins)", "Daily Cap");
+    printf("---------------------------------------------------------------------------------\n");
+    for (i = 0; i < numberOfSpecialties; i++) {
+        printf("%-5d | %-20s | %-15.2f | %-12d | %-10d\n",
+               specialtyId[i], specialtyName[i], consultationFee[i], consultationTime[i],
+               dailyPatientCapacity[i]);
+    }
+    printf("=================================================================================\n");
+}
+
 
 int main()
 {
