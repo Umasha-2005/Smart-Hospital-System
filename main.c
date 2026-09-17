@@ -49,6 +49,18 @@ int specialtyQueue[4] = {0, 0, 0, 0};
 int patientCount = 0;
 int nextPatientId = 1001;
 
+void initializeBeds()
+{
+    int i,j;
+    for (i=0; i<numberOfWards; i++)
+    {
+        for(j=0; j<maxBeds; j++)
+        {
+            bedOccupancy[i][j] = 0;
+        }
+    }
+}
+
 
 int main()
 {
