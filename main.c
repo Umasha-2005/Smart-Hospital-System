@@ -91,6 +91,26 @@ void displayWards() {
     printf("=================================================================================\n");
 }
 
+int getSpecialtyIndex (int id)
+{
+    for (int i=0; i<numberOfSpecialties; i++)
+    {
+        if (specialtyId[i] == id)
+            return i;
+    }
+    return -1;
+}
+
+int getWardIndex (int id)
+{
+    for (int i=0; i<numberOfWards; i++)
+    {
+        if (wardId[i] == id)
+            return i;
+    }
+    return -1;
+}
+
 
 int main()
 {
