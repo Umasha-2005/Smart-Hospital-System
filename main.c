@@ -275,6 +275,52 @@ void calculateBilling(int idx)
     finalPayable[idx] = grossTotal[idx] - discount[idx];
 }
 
+void displayBillingReceipt(int idx) {
+    calculateBilling(idx);
+
+    int specIdx = getSpecialtyIndex(patientSpecialty[idx]);
+    char urgencyStr[15];
+    if (patientUrgency[idx] == 1)
+    {
+        strcpy(urgencyStr, "Emergency");
+    }
+    else if (patientUrgency[idx] == 2)
+    {
+        strcpy(urgencyStr, "Urgent");
+    }
+    else
+    {
+        strcpy(urgencyStr, "Standard");
+    }
+    printf("\n==================================================\n");
+    printf("              PATIENT BILLING RECEIPT             \n");
+    printf("==================================================\n");
+    printf("Patient ID     : %d\n", patientId[idx]);
+    printf("Patient Name   : %s\n", patientName[idx]);
+    printf("Age            : %d\n", patientAge[idx]);
+    printf("Specialty      : %s\n", specialtyName[specIdx]);
+    printf("Urgency Level  : %s\n", urgencyStr);
+
+    if (patientAdmitted[idx] == 1) {
+        int wIdx = getWardIndex(patientWard[idx]);
+        printf("Ward           : %s (Bed #%d)\n", wardName[wIdx], patientBed[idx]);
+        printf("Days of Stay   : %d\n", patientDays[idx]);
+    } else {
+        printf("Ward Admission : No\n");
+    }
+    printf("--------------------------------------------------\n");
+    printf("Base Consultation Fee   : LKR %10.2f\n", baseFee[idx]);
+    printf("Emergency Surcharge     : LKR %10.2f\n", emergencySurcharge[idx]);
+    printf("Ward Charges            : LKR %10.2f\n", wardCost[idx]);
+    printf("--------------------------------------------------\n");
+    printf("Gross Total             : LKR %10.2f\n", grossTotal[idx]);
+    printf("Discount                : LKR %10.2f\n", discount[idx]);
+    printf("--------------------------------------------------\n");
+    printf("FINAL PAYABLE AMOUNT    : LKR %10.2f\n", finalPayable[idx]);
+    printf("==================================================\n");
+}
+
+
 int main()
 {
     printf("Smart Hospital System Loaded.\n");
