@@ -130,6 +130,110 @@ float calculateWaitingTime (int specialtyIdx, int currentQueuePosition)
     return (float)(currentQueuePosition * avgTime);
 }
 
+void registerPatient() {
+    if (patientCount >= maxPatients) {
+        printf("\nError: Maximum patient limit (%d) reached.\n", maxPatients);
+        return;
+    }
+
+    int specId, specIdx;
+    printf("\n--- Patient Registration ---\n");
+    displaySpecialties();
+
+    while (1) {
+        printf("Enter Specialty ID (1-4): ");
+        if (scanf("%d", &specId) != 1) {
+            while (getchar() != '\n');
+            printf("Invalid input. Enter a number.\n");
+            continue;
+        }
+        specIdx = getSpecialtyIndex(specId);
+        if (specIdx == -1) {
+            printf("Invalid Specialty ID. Try again.\n");
+            continue;
+        }
+        if (specialtyQueue[specIdx] >= dailyPatientCapacity[specIdx]) {
+            printf("Daily patient capacity reached for this specialty. Choose another.\n");
+            continue;
+        }
+        break;
+    }
+
+    while (getchar() != '\n');
+
+    int idx = patientCount;
+    patientId[idx] = nextPatientId++;
+
+    printf("Enter Patient Name: ");
+    fgets(patientName[idx], 50, stdin);
+
+    int len = strlen(patientName[idx]);
+    if (len > 0 && patientName[idx][len - 1] == '\n') {
+        patientName[idx][len - 1] = '\0';
+    }
+
+    while (1) {
+        printf("Enter Patient Age: ");
+        if (scanf("%d", &patientAge[idx]) == 1 && patientAge[idx] >= 0) {
+            break;
+        }
+        while (getchar() != '\n');
+        printf("Invalid age! Age cannot be negative.\n");
+    }
+
+    while (1) {
+        printf("Enter Urgency Level (1-Emergency, 2-Urgent, 3-Standard): ");
+        scanf("%d", &patientUrgency[idx]);
+        if (patientUrgency[idx] >= 1 && patientUrgency[idx] <= 3) break;
+        printf("Invalid urgency level. Choose 1, 2, or 3.\n");
+    }
+
+    patientSpecialty[idx] = specId;
+    specialtyQueue[specIdx]++;
+    registrationOrder[idx] = idx;
+
+    printf("Is patient being admitted to Ward? (1-Yes, 0-No): ");
+    scanf("%d", &patientAdmitted[idx]);
+
+    if (patientAdmitted[idx] == 1) {
+        int wId, wIdx;
+        displayWards();
+        while (1) {
+            printf("Enter Ward ID (1-4): ");
+            scanf("%d", &wId);
+            wIdx = getWardIndex(wId);
+            if (wIdx == -1) {
+                printf("Invalid Ward ID. Try again.\n");
+                continue;
+            }
+            int bed = findAvailableBed(wIdx);
+            if (bed == -1) {
+                printf("Ward is full! Choose another ward.\n");
+                continue;
+            }
+            patientWard[idx] = wId;
+            patientBed[idx] = bed + 1;
+            bedOccupancy[wIdx][bed] = 1;
+            break;
+        }
+
+        while (1) {
+            printf("Enter Expected Days of Stay: ");
+            if (scanf("%d", &patientDays[idx]) == 1 && patientDays[idx] > 0) {
+                break;
+            }
+            while (getchar() != '\n');
+            printf("Invalid days! Please enter a number greater than 0.\n");
+        }
+    } else {
+        patientWard[idx] = 0;
+        patientBed[idx] = 0;
+        patientDays[idx] = 0;
+    }
+
+    patientCount++;
+    printf("\nPatient registered successfully! Assigned Patient ID: %d\n", patientId[idx]);
+}
 
 int main()
 {
