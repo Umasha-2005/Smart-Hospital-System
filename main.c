@@ -320,6 +320,90 @@ void displayBillingReceipt(int idx) {
     printf("==================================================\n");
 }
 
+int findPatientIndexById(int targetId)
+{
+    for(int i=0; i<patientCount; i++)
+    {
+        if(patientId[i] == targetId)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void searchPatient()
+{
+    int searchId;
+    printf("\nEnter Patient ID to search\t:");
+
+    if (scanf("%d", &searchId) !=1)
+    {
+        while (getchar() != '\n');
+        printf("Invalid ID format.\n");
+        return;
+    }
+
+    int idx = findPatientIndexById(searchId);
+    if (idx == -1)
+    {
+        printf("Patient with ID %d not found.\n", searchId);
+        return;
+    }
+
+    displayBillingReceipt(idx);
+}
+
+void displayQueue()
+{
+    if (patientCount == 0)
+    {
+        printf("\nNo patients currently registered in the system.\n");
+        return;
+    }
+
+    printf("\n===================================================================================================\n");
+    printf("                                  PATIENT CONSULTATION QUEUE\n");
+    printf("===================================================================================================\n");
+    printf("%-5s | %-8s | %-20s | %-12s | %-18s | %-12s\n",
+           "Pos", "ID", "Name", "Urgency", "Specialty", "Est. Wait (m)");
+    printf("---------------------------------------------------------------------------------------------------\n");
+
+    int pos = 1;
+    for (int level = 1; level <= 3; level++)
+    {
+        for (int i=0; i<patientCount; i++)
+        {
+            if (patientUrgency[i] == level)
+            {
+                int specIdx = getSpecialtyIndex(patientSpecialty[i]);
+                float wait = calculateWaitingTime(specIdx, pos - 1);
+
+                char urgStr[12];
+                if(level == 1)
+                {
+                     strcpy(urgStr, "Emergency");
+                }
+                else if (level == 2)
+                {
+                    strcpy(urgStr, "Urgent");
+                }
+                else
+                {
+                    strcpy(urgStr, "Standard");
+                }
+
+                printf("%-5d | %-8d | %-20s | %-12s | %-18s | %-12.1f\n",
+                       pos, patientId[i], patientName[i], urgStr, specialtyName[specIdx], wait);
+                pos++;
+
+            }
+        }
+    }
+
+    printf("===================================================================================================\n");
+
+}
 
 int main()
 {
