@@ -506,7 +506,65 @@ void deletePatient()
     printf("Patient ID %d discharged/deleted successfully!\n", targetId);
 }
 
+void generateDailyAnalytics()
+{
+   printf("\n=================================================================================\n");
+   printf("                           DAILY HOSPITAL ANALYTICS & REPORTS\n");
+   printf("=================================================================================\n");
+   printf("Total Patients Registered Today : %d\n", patientCount);
 
+   int emergencyCount = 0, urgentCount = 0, standardCount =0;
+   int totalAdmitted = 0;
+   float totalRevenue = 0.0f;
+   float totalDiscounts = 0.0f;
+
+   for (int i=0; i<patientCount; i++)
+   {
+       calculateBilling(i);
+       totalRevenue += finalPayable[i];
+       totalDiscounts += discount[i];
+
+       if (patientUrgency[i] == 1)
+       {
+           emergencyCount++;
+       }
+       else if (patientUrgency[i] == 2)
+       {
+           urgentCount++;
+       }
+       else
+       {
+           standardCount++;
+       }
+
+       if (patientAdmitted[i] == 1)
+       {
+           totalAdmitted++;
+       }
+   }
+
+    printf("Total In-Patient Admissions     : %d\n", totalAdmitted);
+    printf("Total Out-Patients              : %d\n", patientCount - totalAdmitted);
+    printf("---------------------------------------------------------------------------------\n");
+    printf("Urgency Breakdown               : Emergency: %d | Urgent: %d | Standard: %d\n",
+           emergencyCount, urgentCount, standardCount);
+    printf("---------------------------------------------------------------------------------\n");
+    printf("Total Gross Revenue Generated   : LKR %.2f\n", totalRevenue + totalDiscounts);
+    printf("Total Discounts Awarded         : LKR %.2f\n", totalDiscounts);
+    printf("Total Net Revenue Collected     : LKR %.2f\n", totalRevenue);
+    printf("=================================================================================\n");
+
+    printf("\n--- Ward Occupancy Rates ---\n");
+    for (int w = 0; w < numberOfWards; w++) {
+        int occupied = 0;
+        for (int b = 0; b < wardCapacity[w]; b++) {
+            if (bedOccupancy[w][b] == 1) occupied++;
+        }
+        float rate = ((float)occupied / wardCapacity[w]) * 100.0f;
+        printf("%-20s : %d / %d Beds Occupied (%.1f%%)\n", wardName[w], occupied, wardCapacity[w], rate);
+    }
+    printf("=================================================================================\n");
+}
 
 int main()
 {
