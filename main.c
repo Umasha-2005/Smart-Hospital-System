@@ -405,6 +405,109 @@ void displayQueue()
 
 }
 
+void updatePtient()
+{
+    int targetId;
+    printf("\nEnter Patient ID to update\t:");
+    if (scanf("%d", &targetId) != 1)
+    {
+        while (getchar() != '\n');
+        printf("Invalid ID.\n");
+        return;
+    }
+
+    int idx = findPatientIndexById(targetId);
+    if (idx == -1)
+    {
+        printf("Patient with ID %d not found.\n", targetId);
+        return;
+    }
+
+    printf("\nUpdating records for Patient ID\t: %d (%s)\n", patientId[idx],
+            patientName[idx]);
+
+    while (1)
+    {
+        printf("Enter New Urgency Level (1-Emergency, 2-Urgency, 3-Standard): ");
+        if (scanf("%d", &patientUrgency[idx]) == 1 && patientUrgency[idx] >= 1 &&
+                  patientUrgency[idx] <= 3)
+        {
+            break;
+        }
+        while (getchar() != '\n');
+        printf("Invalid choice. Enter 1, 2, or 3.\n");
+    }
+    if (patientAdmitted[idx] == 1)
+    {
+        while (1)
+        {
+            printf("Enter New Expected Days of stay\t: ");
+            if (scanf("%d", &patientDays[idx]) == 1 && patientDays[idx] > 0)
+            {
+                break;
+            }
+            while (getchar() != '\n');
+            printf ("Invalid days! Enter a number greater than 0.\n");
+        }
+    }
+
+    printf("Patient record update successfully!\n");
+}
+
+void deletePatient()
+{
+    int targetId;
+    printf("\nEnter Patient ID to discharge\t: ");
+    if (scanf("%d", &targetId) != 1)
+    {
+        while(getchar() != '\n');
+        printf("Invalid ID.\n");
+        return;
+    }
+
+    int idx = findPatientIndexById(targetId);
+    if (idx == -1)
+    {
+        printf("Patient with ID %d not found.\n", targetId);
+        return;
+    }
+
+    int specIdx = getSpecialtyIndex(patientSpecialty[idx]);
+    if (specIdx != -1 && specialtyQueue[specIdx] > 0)
+    {
+        specialtyQueue[specIdx]--;
+    }
+
+    if (patientAdmitted[idx] == 1)
+    {
+        int wIdx = getWardIndex(patientWard[idx]);
+        int bedNum = patientBed[idx] - 1;
+        if (wIdx != -1 && bedNum >= 0 && bedNum < maxBeds)
+        {
+            bedOccupancy[wIdx][bedNum] = 0;
+        }
+    }
+
+    for (int i = idx; i < patientCount-1; i++)
+    {
+        patientId[i] = patientId[i+1];
+        strcpy(patientName[i], patientName[i+1]);
+        patientAge[i] = patientAge[i + 1];
+        patientUrgency[i] = patientUrgency[i + 1];
+        patientSpecialty[i] = patientSpecialty[i + 1];
+        patientAdmitted[i] = patientAdmitted[i + 1];
+        patientWard[i] = patientWard[i + 1];
+        patientDays[i] = patientDays[i + 1];
+        patientBed[i] = patientBed[i + 1];
+        registrationOrder[i] = registrationOrder[i + 1];
+    }
+
+    patientCount--;
+    printf("Patient ID %d discharged/deleted successfully!\n", targetId);
+}
+
+
+
 int main()
 {
     printf("Smart Hospital System Loaded.\n");
