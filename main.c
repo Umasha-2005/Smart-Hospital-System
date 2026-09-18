@@ -566,8 +566,69 @@ void generateDailyAnalytics()
     printf("=================================================================================\n");
 }
 
+
+
 int main()
 {
-    printf("Smart Hospital System Loaded.\n");
+    initializeBeds();
+    int choice;
+
+    while(1)
+    {
+        printf("\n==========================================================\n");
+        printf("               SMART HOSPITAL MANAGEMENT SYSTEM           \n");
+        printf("==========================================================\n");
+        printf(" 1. Display Doctor Specialties\n");
+        printf(" 2. Display Wards & Bed Status\n");
+        printf(" 3. Register New Patient\n");
+        printf(" 4. Search Patient & Print Receipt\n");
+        printf(" 5. Display Consultation Queue (Priority Order)\n");
+        printf(" 6. Update Patient Details\n");
+        printf(" 7. Discharge / Delete Patient\n");
+        printf(" 8. Generate Daily Analytics & Summary Report\n");
+        printf(" 9. Exit System\n");
+        printf("==========================================================\n");
+        printf("Enter your choice (1-9)\t\t: ");
+
+        if (scanf("%d", &choice) != 1)
+        {
+            while (getchar() != '\n');
+            printf("Invalid input! Please enter a number between 1 and 9.\n");
+            continue;
+        }
+
+        switch (choice)
+        {
+        case 1:
+            displaySpecialties();
+            break;
+        case 2:
+            displayWards();
+            break;
+        case 3:
+            registerPatient();
+            break;
+        case 4:
+            searchPatient();
+            break;
+        case 5:
+            displayQueue();
+            break;
+        case 6:
+            updatePtient();
+            break;
+        case 7:
+            deletePatient();
+            break;
+        case 8:
+            generateDailyAnalytics();
+            break;
+        case 9:
+            printf("\nExiting Smart Hospital system. Thank you!\n");
+            return 0;
+        default:
+            printf("Invalid choice! Please select an option between 1 and 9.\n");
+        }
+    }
     return 0;
 }
