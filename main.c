@@ -116,7 +116,7 @@ int findAvailableBed(int wardIdx)
     int capacity = wardCapacity[wardIdx];
     for (int b=0; b<capacity; b++)
     {
-        if (bedOccupancy[wardIdx] == 0)
+        if (bedOccupancy[wardIdx][b] == 0)
         {
             return b;
         }
@@ -142,7 +142,7 @@ void registerPatient()
     displaySpecialties();
 
     while (1) {
-        printf("Enter Specialty ID (1-4): ");
+        printf("Please Enter Specialty ID (1-4)\t\t: ");
         if (scanf("%d", &specId) != 1) {
             while (getchar() != '\n');
             printf("Invalid input. Enter a number.\n");
@@ -165,7 +165,7 @@ void registerPatient()
     int idx = patientCount;
     patientId[idx] = nextPatientId++;
 
-    printf("Enter Patient Name: ");
+    printf("Please Enter Patient Name\t\t: ");
     fgets(patientName[idx], 50, stdin);
 
     int len = strlen(patientName[idx]);
@@ -174,7 +174,7 @@ void registerPatient()
     }
 
     while (1) {
-        printf("Enter Patient Age: ");
+        printf("Please Enter Patient Age\t\t: ");
         if (scanf("%d", &patientAge[idx]) == 1 && patientAge[idx] >= 0) {
             break;
         }
@@ -183,7 +183,7 @@ void registerPatient()
     }
 
     while (1) {
-        printf("Enter Urgency Level (1-Emergency, 2-Urgent, 3-Standard): ");
+        printf("Please Enter Urgency Level (1-Emergency, 2-Urgent, 3-Standard): ");
         scanf("%d", &patientUrgency[idx]);
         if (patientUrgency[idx] >= 1 && patientUrgency[idx] <= 3) break;
         printf("Invalid urgency level. Choose 1, 2, or 3.\n");
@@ -200,7 +200,7 @@ void registerPatient()
         int wId, wIdx;
         displayWards();
         while (1) {
-            printf("Enter Ward ID (1-4): ");
+            printf("Please Enter Ward ID (1-4)\t\t: ");
             scanf("%d", &wId);
             wIdx = getWardIndex(wId);
             if (wIdx == -1) {
@@ -219,7 +219,7 @@ void registerPatient()
         }
 
         while (1) {
-            printf("Enter Expected Days of Stay: ");
+            printf("Please Enter Expected Days of Stay\t\t: ");
             if (scanf("%d", &patientDays[idx]) == 1 && patientDays[idx] > 0) {
                 break;
             }
@@ -335,7 +335,7 @@ int findPatientIndexById(int targetId)
 void searchPatient()
 {
     int searchId;
-    printf("\nEnter Patient ID to search\t:");
+    printf("\nPlease Enter Patient ID to search\t:");
 
     if (scanf("%d", &searchId) !=1)
     {
@@ -408,7 +408,7 @@ void displayQueue()
 void updatePtient()
 {
     int targetId;
-    printf("\nEnter Patient ID to update\t:");
+    printf("\nPlease Enter Patient ID to update\t:");
     if (scanf("%d", &targetId) != 1)
     {
         while (getchar() != '\n');
@@ -428,7 +428,7 @@ void updatePtient()
 
     while (1)
     {
-        printf("Enter New Urgency Level (1-Emergency, 2-Urgency, 3-Standard): ");
+        printf("Please Enter New Urgency Level (1-Emergency, 2-Urgency, 3-Standard): ");
         if (scanf("%d", &patientUrgency[idx]) == 1 && patientUrgency[idx] >= 1 &&
                   patientUrgency[idx] <= 3)
         {
@@ -441,13 +441,13 @@ void updatePtient()
     {
         while (1)
         {
-            printf("Enter New Expected Days of stay\t: ");
+            printf("Please Enter New Expected Days of stay\t: ");
             if (scanf("%d", &patientDays[idx]) == 1 && patientDays[idx] > 0)
             {
                 break;
             }
             while (getchar() != '\n');
-            printf ("Invalid days! Enter a number greater than 0.\n");
+            printf ("Invalid days! Please Enter a number greater than 0.\n");
         }
     }
 
@@ -457,7 +457,7 @@ void updatePtient()
 void deletePatient()
 {
     int targetId;
-    printf("\nEnter Patient ID to discharge\t: ");
+    printf("\nPlease Enter Patient ID to discharge\t: ");
     if (scanf("%d", &targetId) != 1)
     {
         while(getchar() != '\n');
